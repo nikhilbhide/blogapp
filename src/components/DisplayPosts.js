@@ -4,6 +4,9 @@ import { API,graphqlOperation } from 'aws-amplify'
 
 
 class DisplayPosts extends Component {
+    state = {
+        posts:[]
+    }
 
     componentDidMount = async() => {
         this.getPosts()
@@ -11,13 +14,21 @@ class DisplayPosts extends Component {
 
     getPosts = async() => {
         const result = await API.graphql(graphqlOperation(listPosts))
-        console.log("All posts:", JSON.stringify(result.data.listPosts.items))
+        this.setState({posts:result.data.listPosts.items})        
     }
 
     render() {
-        return (
-            <div>Hello World</div>
-        )
+        const { posts } = this.state
+        return posts.map((post)=> {
+            return (
+                <div className="posts">
+                    <h1>{post.postTitle}</h1>
+                    <span>
+                        {"Wrote by:"}{post.postOwnerUsername}
+                    </span>
+                </div>
+            )
+        })
     }
 }
 
