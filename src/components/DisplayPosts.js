@@ -1,10 +1,20 @@
 import React, { Component } from 'react'
 import { listPosts } from '../graphql/queries'
-import { API,graphqloperation } from 'aws-amplify'
+import { API,graphqlOperation } from 'aws-amplify'
 
 
 class DisplayPosts extends Component {
-    render(){
+
+    componentDidMount = async() => {
+        this.getPosts()
+    }
+
+    getPosts = async() => {
+        const result = await API.graphql(graphqlOperation(listPosts))
+        console.log("All posts:", JSON.stringify(result.data.listPosts.items))
+    }
+
+    render() {
         return (
             <div>Hello World</div>
         )
